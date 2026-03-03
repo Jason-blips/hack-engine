@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.dto.UserResponse;
+import com.example.demo.service.SecurityLogService;
 import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -24,10 +25,21 @@ public class AuthRestController {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
+    private final SecurityLogService securityLogService;
 
-    public AuthRestController(UserService userService, AuthenticationManager authenticationManager) {
+    public AuthRestController(UserService userService, AuthenticationManager authenticationManager,
+                              SecurityLogService securityLogService) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+        this.securityLogService = securityLogService;
+    }
+
+    private static String clientIp(HttpServletRequest request) {
+        String xff = request.getHeader("X-Forwarded-For");
+        if (xff != null && !xff.isBlank()) {
+            return xff.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
     }
 
     @PostMapping("/register")
@@ -47,6 +59,8 @@ public class AuthRestController {
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             httpRequest.getSession(true);
+            securityLogService.logLogin(authentication.getName(), clientIp(httpRequest),
+                    httpRequest.getHeader("User-Agent"));
             return ResponseEntity.ok(new UserResponse(authentication.getName()));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -63,7 +77,10 @@ public class AuthRestController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request) {
+    public ResponseEntity<?> logout(HttpServletRequest request, Principal principal) {
+        if (principal != null) {
+            securityLogService.logLogout(principal.getName(), clientIp(request), request.getHeader("User-Agent"));
+        }
         var session = request.getSession(false);
         if (session != null) {
             session.invalidate();

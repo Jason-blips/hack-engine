@@ -11,6 +11,9 @@
 
 - **注册 / 登录**：用户名 + 密码，BCrypt 存库，Session 保持，前端带 Cookie 访问
 - **访问控制**：未登录访问受保护页会跳转登录
+- **安全仪表盘**：登录后进入终端风格仪表盘，展示上次登录时间与 IP、最近登录/登出记录、2FA 开关（演示）
+- **密码强度**：注册时实时强度条与常见弱密码检测，弱密码禁止注册
+- **安全日志**：后端记录每次登录/登出（IP、User-Agent、时间），仪表盘可查看最近活动
 - **验证码 / 支付密码页**：演示流程（仅 UI 演示，演示用码由前端配置）
 
 ---
@@ -60,18 +63,15 @@ hack-engine/
 
 ## 后续可扩展方向（网络安全 / 黑客向）
 
-在现有登录与演示流程基础上，可逐步增加：
+已实现：安全仪表盘（终端风格）、密码强度与弱密码检测、安全日志（登录/登出）。可继续增加：
 
 | 方向 | 示例 |
 |------|------|
-| **安全仪表盘** | 登录后首页：密码强度、最近登录记录、异常 IP 提示、双因素开关（2FA 预留） |
-| **密码与账户安全** | 注册/改密时强度条、弱密码检测；可选：泄露检查（如 Have I Been Pwned API）、历史密码不可重复 |
 | **双因素认证（2FA）** | 验证码页改为真实 TOTP（如 Google Authenticator），后端校验；可选短信/邮箱验证码 |
-| **安全日志与审计** | 记录登录/登出、改密、敏感操作；安全日志页或导出 |
+| **安全日志扩展** | 改密、敏感操作记录；安全日志导出或审计页 |
 | **漏洞/攻击演示（教学）** | SQL 注入 / XSS / CSRF 对比页（安全 vs 不安全写法），仅用于教育 |
 | **CTF 小关卡** | 与安全相关的小题闯关，完成后解锁下一关或成就 |
 | **API 安全** | rate limit、API Key 或 JWT；文档说明安全使用方式 |
-| **终端/黑客风格 UI** | 深色+绿色主题、终端风格仪表盘、等宽字体、打字机效果 |
 | **漏洞扫描器（演示）** | 对指定 URL 简单爬取与基础检测（如 CSRF、HTTPS），仅展示不执行攻击 |
 
 ---
@@ -80,10 +80,12 @@ hack-engine/
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| POST | `/api/register` | Body: `{ "username", "password" }`，密码至少 6 位 |
-| POST | `/api/login`     | Body: `{ "username", "password" }`，成功写 Session，返回 `{ "username" }` |
+| POST | `/api/register` | Body: `{ "username", "password" }`，密码至少 6 位，建议使用强度条并避免弱密码 |
+| POST | `/api/login`     | Body: `{ "username", "password" }`，成功写 Session 并记录安全日志，返回 `{ "username" }` |
 | GET  | `/api/me`        | 需登录，返回当前用户 `{ "username" }` |
-| POST | `/api/logout`    | 需登录，销毁 Session |
+| POST | `/api/logout`    | 需登录，记录登出日志并销毁 Session |
+| GET  | `/api/security/summary` | 需登录，返回 `{ lastLoginAt, lastLoginIp, twoFactorEnabled }` |
+| GET  | `/api/security/logs`    | 需登录，返回最近登录/登出记录列表 |
 
 请求需带 Cookie（`withCredentials: true`），前端通过 proxy 访问后端即可。
 

@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const SignUpPage = lazy(() => import('./pages/SignUpPage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const VerificationPage = lazy(() => import('./pages/VerificationPage'));
 const PaymentPasswordPage = lazy(() => import('./pages/PaymentPasswordPage'));
 const PaymentSuccessPage = lazy(() => import('./pages/PaymentSuccessPage'));
@@ -31,7 +32,15 @@ function AppRoutes() {
           path="/"
           element={
             <ProtectedRoute isLoggedIn={isLoggedIn}>
-              <Navigate to="/verification" replace />
+              <Navigate to="/dashboard" replace />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <DashboardPage />
             </ProtectedRoute>
           }
         />

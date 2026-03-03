@@ -3,7 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { FaSpinner, FaLock, FaUser } from 'react-icons/fa';
 import GlobalBanner from '../components/GlobalBanner';
+import PasswordStrengthBar from '../components/PasswordStrengthBar';
 import { THEME } from '../constants';
+import { isWeakPassword } from '../utils/passwordStrength';
 import * as authApi from '../api/authApi';
 
 const fadeIn = keyframes`
@@ -140,6 +142,10 @@ function SignUpPage() {
       setError('Password must be at least 6 characters');
       return;
     }
+    if (isWeakPassword(password)) {
+      setError('This password is too common. Please choose a stronger one.');
+      return;
+    }
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -187,6 +193,7 @@ function SignUpPage() {
                 autoComplete="new-password"
                 disabled={!!success}
               />
+              <PasswordStrengthBar password={password} />
             </FormGroup>
             <FormGroup>
               <InputIcon aria-hidden><FaLock /></InputIcon>
