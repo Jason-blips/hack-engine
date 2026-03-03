@@ -3,6 +3,9 @@
 export const APP_NAME = 'Hack Engine';
 export const AUTH_KEY = 'hack_engine_auth';
 
+/** Backend base URL for OAuth redirect (browser must go to backend, then to Google/Facebook) */
+export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+
 /** 仅用于开发/演示；生产环境必须改为后端校验，前端不可写死真实验证码或支付密码 */
 export const DEMO_VERIFICATION_CODE = '040322';
 export const DEMO_PAYMENT_PASSWORD = '040322';

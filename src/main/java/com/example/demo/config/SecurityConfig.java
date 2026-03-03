@@ -14,15 +14,22 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final OAuth2SuccessHandler oauth2SuccessHandler;
+
+    public SecurityConfig(OAuth2SuccessHandler oauth2SuccessHandler) {
+        this.oauth2SuccessHandler = oauth2SuccessHandler;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/**")
+                .ignoringRequestMatchers("/api/**", "/oauth2/**", "/login/oauth2/**")
         );
         http.cors(cors -> {});
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/login", "/register", "/style.css", "/error").permitAll()
+                .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
                 .requestMatchers("/api/register", "/api/login").permitAll()
                 .requestMatchers("/api/me", "/api/logout", "/api/security/**").authenticated()
                 .anyRequest().authenticated()
@@ -31,6 +38,9 @@ public class SecurityConfig {
                 .loginPage("/login")
                 .defaultSuccessUrl("/welcome", true)
                 .failureUrl("/login?error")
+            )
+            .oauth2Login(oauth2 -> oauth2
+                .successHandler(oauth2SuccessHandler)
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")

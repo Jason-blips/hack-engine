@@ -14,6 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -73,7 +74,14 @@ public class AuthRestController {
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.ok(new UserResponse(principal.getName()));
+        String username = principal.getName();
+        if (principal instanceof OAuth2User oauth2User) {
+            Object email = oauth2User.getAttribute("email");
+            if (email != null) {
+                username = email.toString();
+            }
+        }
+        return ResponseEntity.ok(new UserResponse(username));
     }
 
     @PostMapping("/logout")
