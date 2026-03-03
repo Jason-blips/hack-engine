@@ -1,0 +1,282 @@
+:root {
+  --greyDark: #7d8792;
+  --headingColor: #2d2e2e;
+  --white: #fff;
+  --black: #000;
+  --silver: #bac8d3;
+  --primaryColor: #1ebd65; /* 确保 hover 颜色有效 */
+}
+
+body {
+  background-color: var(--headingColor);
+  color: var(--white);
+  font-family: "Poppins", sans-serif;
+}
+
+a {
+  color: var(--greyDark);
+  text-decoration: none;
+  transition: 0.5s;
+}
+
+a:hover {
+  color: var(--primaryColor);
+}
+
+p {
+  color: var(--silver);
+  font-size: 15px;
+  line-height: 30px;
+  margin: 20px 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+}
+
+.container {
+  max-width: 80%;
+  margin: auto;
+}
+
+.flexsb {
+  display: flex;
+  justify-content: space-between;
+}
+
+/*-------------------header---------------*/
+header {
+  background-color: var(--headingColor);
+  height: 10vh;
+  line-height: 10vh;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+header a {
+  margin-left: 40px;
+}
+
+/*-------------------creative-----------------*/
+.creative .quote {
+  font-size: 50px;
+  color: var(--primaryColor);
+  margin: 20px 0;
+}
+
+.creative .content h1 {
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.creative .content h3 {
+  margin: 40px 0 20px 0;
+  font-weight: 400;
+  font-size: 20px;
+  color: var(--primaryColor);
+}
+
+/*-------------------educations-----------------*/
+.educations .box {
+  margin-top: 20px;
+}
+
+.educations .content h1 {
+  font-size: 40px;
+  color: var(--primaryColor);
+  margin-right: 30px;
+}
+
+.educations .content h2 {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.educations .contentLeft {
+  padding: 80px 50px;
+}
+
+/*------------------- Verification / Payment pages -----------------*/
+.page-card-layout {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.verification-container,
+.payment-password-container,
+.payment-success-container {
+  max-width: 400px;
+  width: 100%;
+  margin: 0;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  color: #333;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.verification-container h2,
+.payment-password-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.verification-container .input-group,
+.payment-password-container .input-field {
+  margin-bottom: 1rem;
+}
+
+.verification-container .input-group {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.verification-container .input-group input,
+.payment-password-container input[type="password"] {
+  flex: 1;
+  padding: 12px 15px;
+  border: 2px solid #eee;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.verification-container .input-group input:focus,
+.payment-password-container input:focus {
+  border-color: var(--primaryColor);
+  outline: none;
+}
+
+.verification-container .input-group button,
+.payment-password-container button,
+.payment-success-container .continue-button {
+  padding: 12px 20px;
+  background: linear-gradient(to right, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.verification-container .input-group button:hover:not(:disabled),
+.payment-password-container button:hover:not(:disabled),
+.payment-success-container .continue-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.verification-container .input-group button:disabled,
+.payment-password-container button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.verification-container .countdown-button {
+  margin-top: 1rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--greyDark);
+  font-size: 14px;
+  cursor: pointer;
+  display: block;
+}
+
+.verification-container .countdown-button:hover:not(:disabled) {
+  color: var(--primaryColor);
+}
+
+.verification-container .countdown-button:disabled {
+  cursor: default;
+  color: #999;
+}
+
+.verification-container .success-message,
+.payment-password-container .error-message {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.verification-container .success-message {
+  color: var(--primaryColor);
+}
+
+.payment-password-container .error-message {
+  color: #e74c3c;
+}
+
+.payment-password-container button.submitting {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.payment-success-container {
+  text-align: center;
+}
+
+.payment-success-container .success-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+  line-height: 64px;
+  font-size: 36px;
+  color: white;
+  background: var(--primaryColor);
+  border-radius: 50%;
+}
+
+.payment-success-container .success-title {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.payment-success-container .order-summary {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: #f5f5f5;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.payment-success-container .order-summary p {
+  margin: 0.5rem 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.payment-success-container .thank-you-message {
+  margin: 1rem 0 1.5rem;
+  color: #666;
+}
+
+.payment-success-container .continue-button {
+  display: inline-block;
+}
+
+/*-------------------响应式----------------------*/
+@media (max-width: 768px) {
+  .container {
+    max-width: 95%;
+  }
+  .page-card-layout {
+    padding: 1rem;
+  }
+  .verification-container,
+  .payment-password-container,
+  .payment-success-container {
+    padding: 1.5rem;
+  }
+}

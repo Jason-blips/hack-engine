@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="container welcome-box">
+        <h1>Welcome</h1>
+        <p class="welcome-text">Hello, <strong th:text="${username}">user</strong>!</p>
+        <p class="welcome-sub">You are logged in.</p>
+        <form method="post" th:action="@{/logout}" class="logout-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>
+    </div>
+</body>
+</html>
